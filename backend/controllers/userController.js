@@ -42,6 +42,7 @@ const safeDate = (dateString) => {
 // 🔥 CREATE HARDWARE (FIXED FOR employeeAllocated)
 // =========================================================
 exports.createHardware = async (req, res) => {
+    console.log(req.body,"data")
     const { 
         employeeAllocated, // The name (string) sent from the frontend
         hardwareItems,
@@ -86,7 +87,7 @@ exports.createHardware = async (req, res) => {
         user: userId,              // The creator ID
         
         // This is the variable that must be defined (employeeId is now defined as an ID or null)
-        employeeAllocated: employeeId, 
+        employeeAllocated: req.body.employeeAllocated, 
 
         // CRITICAL: Apply safeDate to all string date fields
         deliveryDate: safeDate(restOfBody.deliveryDate),
@@ -94,6 +95,7 @@ exports.createHardware = async (req, res) => {
     });
 
     try {
+        console.log( req.body.employeeAllocated,"new")
         const hardware = await newHardware.save();
         res.status(201).json(hardware);
     } catch (err) {
