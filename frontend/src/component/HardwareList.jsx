@@ -13,6 +13,7 @@ const HardwareList = ({ filteredHardware, handleEdit, handleDelete, handleShow }
     return (
         <div className="bg-white rounded-xl shadow-xl p-0 border border-gray-100">
             {/* 1. Container for Horizontal Scroll (if needed) and Fixed Header */}
+            {/* Note: The header must be in a separate container outside the body scroll area */}
             <div className="overflow-x-auto"> 
                 <table className="min-w-full divide-y divide-gray-200 table-auto"> 
                     {/* Table Header: Sticky to remain visible during vertical scroll */}
@@ -31,10 +32,11 @@ const HardwareList = ({ filteredHardware, handleEdit, handleDelete, handleShow }
             {/* 👇️ 2. CRITICAL SCROLL CONTAINER: Only the body scrolls vertically */}
             <div 
                 className="overflow-x-auto overflow-y-auto" 
-                // Adjusting the maximum height. 
-                // This value (100vh - 350px) is an estimate based on your dashboard layout (header + filters + padding).
-                // You may need to fine-tune '350px' depending on your exact screen size and component heights.
-                style={{ maxHeight: "calc(100vh - 350px)" }} 
+                // ✅ UPDATED HEIGHT: Using a smaller offset (250px) to allocate more vertical space 
+                // for the scrollable list. Fine-tune this value (e.g., 200px or 300px) based on your layout.
+                // style={{ maxHeight: "calc(100vh - 250vh)" }} 
+                                style={{ maxHeight: "calc(-250px + 79vh)" }} 
+
             > 
                 <table className="min-w-full divide-y divide-gray-100 table-auto"> 
                     
@@ -66,14 +68,15 @@ const HardwareList = ({ filteredHardware, handleEdit, handleDelete, handleShow }
                                                 <FaEye className="text-xs" />
                                             </button>
                                             <button 
-                                                onClick={() => handleEdit(hardware._id, hardware.parentId)}
+                                                // Assuming you have a specific way to call edit/delete for hardware records
+                                                onClick={() => handleEdit(hardware, 'hardware')}
                                                 className="p-1.5 text-green-600 hover:text-green-800 transition-colors rounded-full bg-green-100"
                                                 title="Edit Record"
                                             >
                                                 <FaEdit className="text-xs" />
                                             </button>
                                             <button 
-                                                onClick={() => handleDelete(hardware._id, hardware.parentId)}
+                                                onClick={() => handleDelete(hardware._id, 'hardware')}
                                                 className="p-1.5 text-red-600 hover:text-red-800 transition-colors rounded-full bg-red-100"
                                                 title="Delete Record"
                                             >
