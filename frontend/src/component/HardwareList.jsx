@@ -35,7 +35,7 @@ const HardwareList = ({ filteredHardware, handleEdit, handleDelete, handleShow }
                 // ✅ UPDATED HEIGHT: Using a smaller offset (250px) to allocate more vertical space 
                 // for the scrollable list. Fine-tune this value (e.g., 200px or 300px) based on your layout.
                 // style={{ maxHeight: "calc(100vh - 250vh)" }} 
-                                style={{ maxHeight: "calc(-250px + 79vh)" }} 
+                                style={{ maxHeight: "calc(-268px + 79vh)" }} 
 
             > 
                 <table className="min-w-full divide-y divide-gray-100 table-auto"> 
