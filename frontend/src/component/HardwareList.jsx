@@ -73,7 +73,7 @@ const HardwareList = ({ filteredHardware, handleEdit, handleDelete, handleShow }
                                             </button>
                                             
                                             <button 
-                                                onClick={() => handleDelete(hardware._id, 'hardware')}
+                                                onClick={() => handleDelete(hardware._id, hardware.parentId)}
                                                 className="p-1.5 text-red-600 hover:text-red-800 transition-colors rounded-full bg-red-100"
                                                 title="Delete Record"
                                             >
