@@ -342,7 +342,8 @@ const UserDashboard = () => {
         }
     };
 
-    const handleDelete = async (id, parentId) => {
+   const handleDelete = async (id, parentId) => {
+        console.log(id,parentId,"td")
         if (!id || !parentId) {
             showMessage("Error: Missing Item ID or Parent ID for deletion.", 'error');
             return;
