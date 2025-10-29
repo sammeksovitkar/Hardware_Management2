@@ -197,25 +197,57 @@ const UserDashboard = () => {
 
     useEffect(() => {
         fetchUserData();
-        fetchHardwareRecords();
+        // fetchHardwareRecords();
     }, []);
 
     // --- Data Fetching ---
 
-    const fetchUserData = async () => {
+   const fetchUserData = async () => {
         try {
             const res = await axios.get(backend_Url + '/api/user/me', config);
-            setUser(res.data);
+            const userData = res.data;
+            setUser(userData);
+            // 👇️ Call the record fetcher with the user's court station
+            fetchHardwareRecords(userData.village); // Assuming 'village' holds the court station
         } catch (err) {
             console.error('Failed to fetch user data');
+            showMessage('Failed to retrieve user information.', 'error');
+            // If user data fails, fetch all (as a fallback or for an admin who doesn't have a 'village')
+            fetchHardwareRecords(null);
         }
     };
 
-    const fetchHardwareRecords = async () => {
+   const fetchHardwareRecords = async (userCourt = null) => {
+        let apiUrl = '';
+        
+        // Determine the API endpoint based on the user's court station
+        if (userCourt && userCourt !== 'Nashik Dist Court') {
+            // For a specific court/village user
+            // NOTE: This assumes your backend has a path like:
+            // router.get('/hardware/:courtName', authMiddleware, userController.getHardwareByCourt);
+            // OR you use the endpoint you mentioned:
+            // router.get('/hardware', authMiddleware, userMiddleware, userController.getUserHardware);
+            
+            // OPTION A (Using the dedicated /hardware endpoint and letting the backend filter by req.user.id)
+            apiUrl = backend_Url + '/api/user/hardware'; // Assuming this route uses req.user.id to filter
+            
+            // OPTION B (More robust: Fetching based on court station for a "court user")
+            // apiUrl = `${backend_Url}/api/user/hardware/court/${userCourt}`; 
+
+            // For now, let's use the `/hardware` endpoint as suggested by your provided context
+            apiUrl = backend_Url + '/api/user/hardware'; 
+
+        } else {
+            // For Admin or users with a broad view (e.g., 'Nashik Dist Court' admin)
+            apiUrl = backend_Url + '/api/user/allhardware';
+        }
+
         try {
-            const res = await axios.get(backend_Url + '/api/user/allhardware', config);
+            const res = await axios.get(apiUrl, config);
             setHardwareRecords(res.data);
+            
         } catch (err) {
+            console.error('API Error:', err.response || err);
             showMessage('Failed to fetch hardware records. Please ensure you have the necessary permissions.', 'error');
         }
     };
@@ -342,7 +374,7 @@ const UserDashboard = () => {
         }
     };
 
-   const handleDelete = async (id, parentId) => {
+    const handleDelete = async (id, parentId) => {
         console.log(id,parentId,"td")
         if (!id || !parentId) {
             showMessage("Error: Missing Item ID or Parent ID for deletion.", 'error');
